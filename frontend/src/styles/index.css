@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --brand-navy: #070b19;
+  --brand-electric: #3b82f6;
+  --brand-violet: #7c3aed;
+}

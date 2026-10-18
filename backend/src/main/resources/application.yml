@@ -1,0 +1,76 @@
+server:
+  port: ${PORT:8080}
+
+spring:
+  application:
+    name: digitalvault-backend
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:mysql}
+
+  servlet:
+    multipart:
+      max-file-size: 250MB
+      max-request-size: 260MB
+
+  mail:
+    host: ${SMTP_HOST:smtp.gmail.com}
+    port: ${SMTP_PORT:587}
+    username: ${SMTP_USERNAME:notifications@digitalvault.in}
+    password: ${SMTP_PASSWORD:your_app_password_here}
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
+
+---
+spring:
+  config:
+    activate:
+      on-profile: mysql
+  datasource:
+    url: jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/${DB_NAME:digitalvault}?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Kolkata
+    username: ${DB_USER:root}
+    password: ${DB_PASSWORD:changeme}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+
+---
+spring:
+  config:
+    activate:
+      on-profile: postgres
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:digitalvault}
+    username: ${DB_USER:postgres}
+    password: ${DB_PASSWORD:changeme}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+---
+app:
+  brand-name: ${APP_BRAND_NAME:DigitalVault}
+  frontend-url: ${FRONTEND_URL:http://localhost:5173}
+  jwt:
+    secret: ${JWT_SECRET:ReplaceWith64ByteHighEntropyBase64SecretKeyForProductionUseOnly2026!!}
+    expiration-ms: ${JWT_EXPIRATION_MS:86400000}
+  storage:
+    private-vault-dir: ${PRIVATE_VAULT_DIR:/var/digitalvault/private-assets}
+    signed-url-Secret: ${SIGNED_URL_SECRET:ReplaceWithSignedUrlHmacSecretKey2026!!}
+    signed-url-ttl-seconds: 900
+  razorpay:
+    key-id: ${RAZORPAY_KEY_ID:rzp_test_YourTestKeyIdHere}
+    key-secret: ${RAZORPAY_KEY_SECRET:YourRazorpayTestKeySecretHere}
+    webhook-secret: ${RAZORPAY_WEBHOOK_SECRET:YourWebhookSecretHere}
+  google-drive:
+    enabled: ${GOOGLE_DRIVE_ENABLED:false}
+    service-account-key-path: ${GOOGLE_APPLICATION_CREDENTIALS:/etc/digitalvault/gcp-service-account.json}
